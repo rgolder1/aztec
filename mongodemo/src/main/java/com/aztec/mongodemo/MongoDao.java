@@ -15,6 +15,7 @@ public class MongoDao {
 	private final static String NAME_FIELD = "name";
 	private final static String EMAIL_FIELD = "email";
 	private final static String PHONENUMBER_FIELD = "phoneNumber";
+	private final static String ADDRESS_FIELD = "address";
 	
 	public MongoDao(MongoTemplate template) {
 		this.template = template;
@@ -43,5 +44,26 @@ public class MongoDao {
 
 	public void updatePhoneNumber(String name, String phoneNumber) {
 		template.updateFirst(new Query(Criteria.where(NAME_FIELD).is(name)), Update.update(PHONENUMBER_FIELD, phoneNumber), USERS_COLLECTION);
+	}
+	
+	public void addAddress(String name, Address address) {
+		updateAddress(name, address);
+	}
+	
+	public void removeAddress(String name) {
+		updateAddress(name, null);
+	}
+	
+	public void updateAddress(String name, Address address) {
+		template.updateFirst(new Query(Criteria.where(NAME_FIELD).is(name)), Update.update(ADDRESS_FIELD, address), USERS_COLLECTION);
+	}
+	
+	public Address getAddress(String name) {
+		Address address = null;
+		User user = getUser(name);
+		if(user!=null) {
+			address = user.getAddress();
+		}
+		return address;
 	}
 }

@@ -2,6 +2,7 @@ package com.aztec.mongodemo;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.util.List;
 
@@ -31,6 +32,13 @@ public class MongoServiceTest {
 	private static final String NEW_EMAIL = "new_email";
 	private static final String NEW_PHONE_NUMBER = "new_phone_number";
 	
+	private static final String STREET = "street";
+	private static final String CITY = "city";
+	private static final String POSTCODE = "postCode";
+
+	private static final String NEW_STREET = "new_street";
+	private static final String NEW_CITY = "new_city";
+	
 	@After
 	public void tearDown() {
 		List<User> users = service.getAllUsers();
@@ -40,7 +48,7 @@ public class MongoServiceTest {
 	}
 	
 	@Test
-	public void testMongoService() {
+	public void testMongoService_User() {
 		// Create a User.
 		service.createUser(NAME, EMAIL, PHONE_NUMBER);
 		User user = service.getUser(NAME);
@@ -69,5 +77,32 @@ public class MongoServiceTest {
 		}		
 		users = service.getAllUsers();
 		assertEquals(0, users.size());
+	}
+
+	@Test
+	public void testMongoService_Address() {
+		// Create a User.
+		service.createUser(NAME, EMAIL, PHONE_NUMBER);
+		
+		// Add an Address.
+		service.addAddress(NAME, STREET, CITY, POSTCODE);
+		Address address = service.getAddress(NAME);
+		assertNotNull(address);
+		assertEquals(STREET, address.getStreet());
+		assertEquals(CITY, address.getCity());
+		assertEquals(POSTCODE, address.getPostCode());
+		
+		// Update part of the address.
+		service.updateAddress(NAME, NEW_STREET, NEW_CITY, POSTCODE);
+		address = service.getAddress(NAME);
+		assertNotNull(address);
+		assertEquals(NEW_STREET, address.getStreet());
+		assertEquals(NEW_CITY, address.getCity());
+		assertEquals(POSTCODE, address.getPostCode());
+		
+		// Remove the address.
+		service.removeAddress(NAME);
+		address = service.getAddress(NAME);
+		assertNull(address);
 	}
 }

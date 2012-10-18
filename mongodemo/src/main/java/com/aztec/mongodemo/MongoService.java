@@ -43,4 +43,23 @@ public class MongoService {
 	public void updatePhoneNumber(String name, String phoneNumber) {
 		dao.updatePhoneNumber(name, phoneNumber);
 	}
+	
+	public void addAddress(String name, String street, String city, String postCode) {
+		Address address = new Address(street, city, postCode);
+		dao.addAddress(name, address);
+		
+	}
+	
+	public void updateAddress(String name, String street, String city, String postCode) {
+		Address address = new Address(street, city, postCode);
+		dao.updateAddress(name, address);
+	}
+	
+	public void removeAddress(String name) {
+		dao.removeAddress(name);
+	}
+	
+	public Address getAddress(String name) {
+		return dao.getAddress(name);
+	}
 }

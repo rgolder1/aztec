@@ -5,6 +5,7 @@ public class User {
 	private String name;
 	private String email;
 	private String phoneNumber;
+	private Address address;
 	
 	public User(String name, String email, String phoneNumber) {
 		this.name = name;
@@ -34,5 +35,13 @@ public class User {
 
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
+	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
 	}
 }
