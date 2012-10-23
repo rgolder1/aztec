@@ -3,7 +3,7 @@
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
             targetNamespace="http://www.aztec.com/webappdemo/types">
 
-    <xsd:element name="EntityCreation">
+    <xsd:element name="Entity">
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="key" type="xsd:long" minOccurs="1" maxOccurs="1"/>
