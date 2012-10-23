@@ -1,0 +1,39 @@
+<web-app id="WebApp_ID" version="2.4"
+         xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+	http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+    <display-name>SoapDemo</display-name>
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/META-INF/spring/root-context.xml</param-value>
+    </context-param>
+    
+    <context-param>
+     	<param-name>spring.profiles.default</param-name>
+     	<param-value>dev</param-value>
+	</context-param>
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+      	
+    <!-- Our Spring WS dispatcher for SOAP --> 
+    <servlet>
+    	<servlet-name>ws-dispatcher</servlet-name>
+    	<servlet-class>org.springframework.ws.transport.http.MessageDispatcherServlet</servlet-class>
+    	<init-param>
+    		<param-name>contextConfigLocation</param-name>
+      		<param-value>/WEB-INF/spring/ws-dispatcher-context.xml</param-value>
+    	</init-param>
+    	<load-on-startup>1</load-on-startup>
+  	</servlet>
+
+    <servlet-mapping>
+        <servlet-name>ws-dispatcher</servlet-name>
+        <url-pattern>/*</url-pattern>
+    </servlet-mapping>
+
+</web-app>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project name="soapdemo" resourceRoot="" soapui-version="3.6.1" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="EntitiesSoap11" type="wsdl" bindingName="{http://www.aztec.com/soapdemo/types}EntitiesSoap11" soapVersion="1_1" anonymous="optional" definition="file:/Users/robertgolder/dev/sts/workspace-aztec/soapdemo/src/main/resources/wsdl/entities.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:/Users/robertgolder/dev/sts/workspace-aztec/soapdemo/src/main/resources/wsdl/entities.wsdl"><con:part><con:url>file:/Users/robertgolder/dev/sts/workspace-aztec/soapdemo/src/main/resources/wsdl/entities.wsdl</con:url><con:content><![CDATA[<wsdl:definitions targetNamespace="http://www.aztec.com/soapdemo/types" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:sch="http://www.aztec.com/soapdemo/types" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.aztec.com/soapdemo/types">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://www.aztec.com/soapdemo/types" xmlns="http://www.aztec.com/soapdemo/types" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:element name="EntityCreateRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element maxOccurs="1" minOccurs="1" name="key" type="xsd:long"/>
+            <xsd:element maxOccurs="1" minOccurs="1" name="value" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="EntityCreateResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element maxOccurs="1" minOccurs="1" name="value" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="EntityCreateRequest">
+    <wsdl:part element="tns:EntityCreateRequest" name="EntityCreateRequest"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="EntityCreateResponse">
+    <wsdl:part element="tns:EntityCreateResponse" name="EntityCreateResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="Entities">
+    <wsdl:operation name="EntityCreate">
+      <wsdl:input message="tns:EntityCreateRequest" name="EntityCreateRequest"></wsdl:input>
+      <wsdl:output message="tns:EntityCreateResponse" name="EntityCreateResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="EntitiesSoap11" type="tns:Entities">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="EntityCreate">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="EntityCreateRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="EntityCreateResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="EntitiesService">
+    <wsdl:port binding="tns:EntitiesSoap11" name="EntitiesSoap11">
+      <soap:address location="http://localhost:8080/soapdemo"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8080/soapdemo</con:endpoint></con:endpoints><con:operation isOneWay="false" action="" name="EntityCreate" bindingOperationName="EntityCreate" type="Request-Response" outputName="EntityCreateResponse" inputName="EntityCreateRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/soapdemo</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:typ="http://www.aztec.com/soapdemo/types">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <typ:EntityCreateRequest>
+         <key>?</key>
+         <value>?</value>
+      </typ:EntityCreateRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://www.aztec.com/soapdemo/types/Entities/EntityCreateRequest"/></con:call></con:operation></con:interface><con:testSuite name="Entities TestSuite"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="EntityCreate TestCase" searchProperties="true"><con:settings/><con:testStep type="request" name="EntityCreate"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>EntitiesSoap11</con:interface><con:operation>EntityCreate</con:operation><con:request name="EntityCreate"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/soapdemo</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:typ="http://www.aztec.com/soapdemo/types">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <typ:EntityCreateRequest>
+         <key>?</key>
+         <value>?</value>
+      </typ:EntityCreateRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig action="http://www.aztec.com/soapdemo/types/Entities/EntityCreateRequest"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite><con:properties/><con:wssContainer/></con:soapui-project>

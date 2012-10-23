@@ -24,6 +24,10 @@ twitter.access.token.secret=bar
 
 ...substituting foo/bar with genuine credentials.  If necessary, create a new Twitter app here, to generate these credentials: https://dev.twitter.com/apps
 
-- webappdemo:
+- restdemo:
 
 REST Controller with SpringMVC.  The service is a Map for create/get/update/remove.  Integration testing with Groovy.
+
+- soapdemo:
+
+SOAP Controller with Spring Web Services.  The service is a Map for create/get/update/remove.  Includes SoapUI project for testing.  WORK IN PROGRESS.
