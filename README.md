@@ -30,4 +30,4 @@ REST Controller with SpringMVC.  The service is a Map for create/get/update/remo
 
 - soapdemo:
 
-SOAP Controller with Spring Web Services.  The service is a Map for create/get/update/remove.  Includes SoapUI project for testing.  WORK IN PROGRESS.
+SOAP Controller with Spring Web Services.  The service is a Map for create/get/update/remove.  Includes SoapUI project for testing.  (Work in progress).
