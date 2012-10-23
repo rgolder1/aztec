@@ -5,7 +5,7 @@ Collection of demo projects.
 
 - springdemo:
 
-Collection of Spring module demoes, including Hibernate with JPA and JDBC.
+Collection of Spring module demoes, including Hibernate with JPA, and JDBC.
 
 - mongodb:
 
@@ -26,4 +26,4 @@ twitter.access.token.secret=bar
 
 - webappdemo:
 
-REST Controller with SpringMCVC.  The service is a Map for create/update/remove.  Integration testing with Groovy.
+REST Controller with SpringMVC.  The service is a Map for create/update/remove.  Integration testing with Groovy.
