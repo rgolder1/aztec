@@ -26,4 +26,4 @@ twitter.access.token.secret=bar
 
 - webappdemo:
 
-REST Controller with SpringMVC.  The service is a Map for create/update/remove.  Integration testing with Groovy.
+REST Controller with SpringMVC.  The service is a Map for create/get/update/remove.  Integration testing with Groovy.
