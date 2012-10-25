@@ -18,10 +18,13 @@ public class WsSoapController {
     final static Logger LOG = LoggerFactory.getLogger(WsSoapController.class.getName());
     
     // The namespace of both request and response as declared in the XSD file
-    public static final String NAMESPACE_URI = "http://www.aztec.com/soapdemo/types";
+    private static final String NAMESPACE_URI = "http://www.aztec.com/soapdemo/types";
 
     // The local name of the expected request.
-    public static final String REQUEST_LOCAL_NAME = "EntityCreateRequest";
+    private static final String REQUEST_LOCAL_NAME = "EntityCreateRequest";
+    
+    public static final String RESPONSE_SUCCESS = "SUCCESS";
+    public static final String RESPONSE_FAILED = "FAILED";
         
     private EntityService service;
     
@@ -32,14 +35,15 @@ public class WsSoapController {
     
     @PayloadRoot(localPart = REQUEST_LOCAL_NAME, namespace = NAMESPACE_URI)
     @ResponsePayload
-    public EntityCreateResponse createEntityValue(@RequestPayload EntityCreateRequest request) {
+    public EntityCreateResponse createEntity(@RequestPayload EntityCreateRequest request) {
     	LOG.info("WsSoapController hit.  getEntityValue()");
-    	String value = service.put(request.getKey(), request.getValue());
-    	EntityCreateResponse response = null;
-    	if(value!=null) {
-        	response = new EntityCreateResponse();
-        	response.setKey(request.getKey());  
-        	response.setValue(value);    			
+    	EntityCreateResponse response = new EntityCreateResponse();
+    	if(request.getKey()!=0 && request.getValue()!=null) {
+	    	service.put(request.getKey(), request.getValue());
+	    	response.setResult(RESPONSE_SUCCESS);
+    	} else {
+	    	response.setResult(RESPONSE_FAILED);
+
     	}
     	return response;
     }
