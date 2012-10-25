@@ -13,16 +13,15 @@ import com.aztec.soapdemo.types.EntityCreateRequest;
 import com.aztec.soapdemo.types.EntityCreateResponse;
 
 @Endpoint
-//@RequestMapping("/mvc/soap")
 public class WsSoapController {
 
     final static Logger LOG = LoggerFactory.getLogger(WsSoapController.class.getName());
     
-    private final static String URI_ROOT = "/ws/soap";
-    private final static String URI_ENTITY = "/entity";
-    
     // The namespace of both request and response as declared in the XSD file
     public static final String NAMESPACE_URI = "http://www.aztec.com/soapdemo/types";
+
+    // The local name of the expected request.
+    public static final String REQUEST_LOCAL_NAME = "EntityCreateRequest";
         
     private EntityService service;
     
@@ -31,14 +30,15 @@ public class WsSoapController {
     	this.service = service;
     }
     
-    @PayloadRoot(localPart = "createEntity", namespace = NAMESPACE_URI)
+    @PayloadRoot(localPart = REQUEST_LOCAL_NAME, namespace = NAMESPACE_URI)
     @ResponsePayload
-    public EntityCreateResponse getEntityValue(@RequestPayload EntityCreateRequest request) {
+    public EntityCreateResponse createEntityValue(@RequestPayload EntityCreateRequest request) {
     	LOG.info("WsSoapController hit.  getEntityValue()");
-    	String value = service.get(request.getKey());
+    	String value = service.put(request.getKey(), request.getValue());
     	EntityCreateResponse response = null;
     	if(value!=null) {
         	response = new EntityCreateResponse();
+        	response.setKey(request.getKey());  
         	response.setValue(value);    			
     	}
     	return response;
