@@ -1,7 +1,7 @@
 aztec
 =====
 
-Collection of Spring demo projects, including Hibernate with Spring JPA, Spring JDBC, Spring Transactions, Spring Data with MongoDB, REST with SpringMVC, SOAP with SpringWS, Spring Social.  Maven projects, integration testing with Groovy and SoapUI.
+Collection of my Spring demo projects, including Hibernate with Spring JPA, Spring JDBC, Spring Transactions, Spring Data with MongoDB, REST with SpringMVC, SOAP with SpringWS, Spring Social.  Maven projects, integration testing with Groovy and SoapUI.
 
 - springdemo:
 
@@ -32,4 +32,4 @@ REST Controller with SpringMVC.  The service is a Map for create/get/update/remo
 
 SOAP Controller with Spring Web Services.  The service is a Map for create/get/update/remove.  Includes SoapUI project for testing.
 
-Open SoapUI and import project src/tests/resources/soapdemo-soapui-project.xml.  On command line deploy war with mvn tomcat:run, and run SoapUI test cases.
+Open SoapUI and import project src/tests/resources/soapdemo-soapui-project.xml.  On command line deploy war with mvn tomcat:run, and run SoapUI test cases within SoapUI.  Alternatively run mvn clean install, which will run the SoapUI tests as part of the integration-test phase using the maven tomcat and SoapUI plugins.

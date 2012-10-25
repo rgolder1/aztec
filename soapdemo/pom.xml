@@ -8,6 +8,10 @@
   
     <properties>
         <spring.version>3.1.2.RELEASE</spring.version>
+        <serviceHostname>localhost</serviceHostname>
+        <tomcat.version>6.0.33</tomcat.version>
+        <soapui.test.dir>${basedir}/src/test/resources</soapui.test.dir>
+        <soapui.report.dir>${basedir}/target</soapui.report.dir>
     </properties>
     
   	<dependencies>  
@@ -96,73 +100,11 @@
             <artifactId>jackson-xc</artifactId>
             <version>1.9.9</version>
         </dependency>
-		
     </dependencies>
     
     <build>
         <finalName>soapdemo</finalName>
         <plugins>
-              
-            <plugin>
-                <groupId>org.apache.tomcat.maven</groupId>
-                <artifactId>tomcat6-maven-plugin</artifactId>
-                <configuration>
-                    <!--<server>localhost</server>-->
-                    <port>9090</port>
-                    <!--<url>http://localhost:9090/</url>-->
-                    <fork>true</fork>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>test against server</id>
-                        <phase>integration-test</phase>
-                        <configuration>
-                            <port>9090</port>
-                        </configuration>
-                        <goals>
-                            <goal>run-war</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.gmaven</groupId>
-                <artifactId>gmaven-plugin</artifactId>
-                <version>1.2</version>
-                <extensions>true</extensions>
-                <executions>
-                    <execution>
-                        <phase>integration-test</phase>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>testCompile</goal>
-                        </goals>
-                        <configuration>
-                            <providerSelection>1.7</providerSelection>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.7.2</version>
-                <executions>
-                    <execution>
-                        <id>integration-tests</id>
-                        <phase>integration-test</phase>
-                        <goals>
-                            <goal>test</goal>
-                        </goals>
-                        <configuration>
-                            <includes>
-                                <include>**/*IntegrationTest*</include>
-                            </includes>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        
             <!-- xsd generated types -->
             <plugin>
                 <groupId>org.jvnet.jaxb2.maven2</groupId>
@@ -186,6 +128,83 @@
                     <extension>false</extension>
                     <strict>false</strict>
                 </configuration>
+            </plugin>
+              
+            <!-- Tomcat and SoapUI plugins -->
+        	<plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>reserve-ports</id>
+                        <phase>initialize</phase>
+                        <goals><goal>reserve-network-port</goal></goals>
+                        <configuration>
+                            <portNames>
+                                <portName>servicePort</portName>
+                            </portNames>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+				<artifactId>tomcat-maven-plugin</artifactId>
+                <configuration>
+                    <port>${servicePort}</port>
+                    <systemProperties>
+                        <JAVA_OPTS>-Xmx1024m -XX:MaxPermSize=256m</JAVA_OPTS>
+                        <servicePort>${servicePort}</servicePort> 
+                    </systemProperties>
+                    <addContextWarDependencies>true</addContextWarDependencies>
+                    <fork>true</fork>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>setup</id>
+                        <phase>pre-integration-test</phase>
+                        <goals><goal>run-war</goal></goals>
+                    </execution>
+                    <execution>
+                        <id>teardown</id>
+                        <phase>post-integration-test</phase>
+                        <goals><goal>shutdown</goal></goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.tomcat</groupId>
+                        <artifactId>catalina</artifactId>
+                        <version>${tomcat.version}</version>
+                        <scope>runtime</scope>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>eviware</groupId>
+	            <artifactId>maven-soapui-plugin</artifactId>
+                <version>3.6.1</version>
+                <configuration>
+                    <host>${serviceHostname}:${servicePort}</host>
+		            <projectFile>${soapui.test.dir}/soapdemo-soapui-project.xml</projectFile>
+		            <outputFolder>${soapui.report.dir}/soapui-reports</outputFolder>
+                    <exportAll>true</exportAll>
+                    <junitReport>true</junitReport>
+                    <printReport>true</printReport>
+                    <soapuiProperties>
+				      	<property>
+				        	<name>soapui.logroot</name>
+				        	<value>${soapui.report.dir}/soapui-logs/</value>
+				      	</property>
+			      	</soapuiProperties>
+	            </configuration>
+                <executions>
+                    <execution>
+                        <id>soaptest</id>
+                        <phase>integration-test</phase>
+                        <goals><goal>test</goal></goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
