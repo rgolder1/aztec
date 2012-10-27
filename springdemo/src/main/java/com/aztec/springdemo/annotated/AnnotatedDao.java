@@ -15,4 +15,14 @@ public class AnnotatedDao implements DemoResultDao {
 		}
 		return result;
 	}
+
+	@Override
+	public void createRecord(Long id, String type, String result) {
+		// No-op.
+	}
+
+	@Override
+	public void deleteByType(String type) {
+		// No-op.
+	}
 }

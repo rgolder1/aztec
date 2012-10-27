@@ -30,9 +30,13 @@ public class HibernateService {
 	 * - Any RuntimeException triggers rollback, and any checked Exception does not.
 	 */
 	
-	
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-	public void updateResult(Long id, String newResult) {
-		// update
+	public void createDemoResult(Long id, String type, String result) {
+		dao.createRecord(id, type, result);
+	}
+
+	@Transactional
+	public void deleteByType(String type) {
+		dao.deleteByType(type);
 	}
 }

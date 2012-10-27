@@ -1,5 +1,7 @@
 package com.aztec.springdemo.jpa;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -25,5 +27,20 @@ public class HibernateServiceTest {
 
 		assertTrue(result.contains("JPA Success"));
 		assertTrue(result.contains("DEV"));
+	}
+	
+	@Test
+	public void testCreateAndDelete() {
+		Long id = 10l;
+		String type = "TEST";
+		String result = "CREATED";
+		
+		// Create and assert.
+		service.createDemoResult(id, type, result);
+		assertEquals("CREATED", service.getResult("TEST"));
+		
+		// Delete and assert.
+		service.deleteByType(type);
+		assertNull(service.getResult("TEST"));
 	}
 }
