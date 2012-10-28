@@ -1,7 +1,7 @@
 aztec
 =====
 
-Collection of my demo projects, including Hibernate with Spring JPA, Spring JDBC, Spring Transactions, Spring Data with MongoDB, REST with SpringMVC, REST with JAX-RS, SOAP with SpringWS, Spring Social.  Maven projects, integration testing on various projects demonstrate using Groovy, SoapUI and Jersey.
+Collection of my demo projects, including Hibernate with Spring JPA, Spring JDBC, Spring Transactions, Spring Data with MongoDB, REST with SpringMVC, REST with JAX-RS, SOAP with SpringWS, Spring Social.  Maven projects, integration testing on various projects demonstrate using Groovy, SoapUI and a Jersey client.
 
 - springdemo:
 
@@ -26,7 +26,7 @@ twitter.access.token.secret=bar
 
 - restdemo:
 
-REST Controller with SpringMVC.  The service is a Map for create/get/update/remove.  Integration testing with Groovy.
+REST Controller with SpringMVC.  The service is a Map for create/get/update/remove.  Integration testing with Groovy, which are run as part of the mvn clean install.  
 
 - soapdemo:
 
@@ -36,4 +36,4 @@ Open SoapUI and import project src/tests/resources/soapdemo-soapui-project.xml. 
 
 - jaxrsdemo:
 
-REST Controller component, with Jax-Rs using Jersey.  The service is a Map for create/get/update/remove.  Includes a Jersey client for integration testing.  Run as part of the mvn clean install.
+REST Controller component, with Jax-Rs using Jersey.  The service is a Map for create/get/update/remove.  Includes a Jersey client for integration testing.  This is run as part of the mvn clean install.

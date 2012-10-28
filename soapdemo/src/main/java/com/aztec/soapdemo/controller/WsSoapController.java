@@ -29,9 +29,6 @@ public class WsSoapController {
     private static final String REQUEST_GET_NAME = "ItemGetRequest";
     private static final String REQUEST_UPDATE_NAME = "ItemUpdateRequest";
     private static final String REQUEST_DELETE_NAME = "ItemDeleteRequest";
-    
-    public static final String RESPONSE_SUCCESS = "SUCCESS";
-    public static final String RESPONSE_FAILED = "FAILED";
         
     private ItemService service;
     

@@ -4,22 +4,22 @@ import groovy.util.GroovyTestCase;
 
 import groovyx.net.http.HttpResponseException;
 import com.aztec.util.MarshallingUtil;
-import com.aztec.restdemo.types.Entity;
+import com.aztec.common.types.ItemLookupResponse;
 
 class MvcRestControllerIntegrationTest extends GroovyTestCase {
 	
 	def URL = "http://localhost:9090/restdemo/";
-	def PATH = "mvc/rest/entity/";
+	def PATH = "mvc/rest/item/";
 	
 	/**
-	 * Create an entity.  201 CREATED expected.
+	 * Create an item.  201 CREATED expected.
 	 */
-	def void test_CreateEntity() {
+	def void testCreateItem() {
 		long key = 111;
 		String value = "value";
 		
         def body = '{"key": ' + key + ', "value": "' + value + '"}' 
-		println("createEntityBody=" + body)
+		println("createItemBody=" + body)
 		
 		def response = new groovyx.net.http.RESTClient(URL).post(path: PATH, contentType: groovyx.net.http.ContentType.JSON, body: body)
 
@@ -30,10 +30,10 @@ class MvcRestControllerIntegrationTest extends GroovyTestCase {
 	}
 	
 	/**
-	 * Get an entity. 200 OK expected.
+	 * Get an item. 200 OK expected.
 	 */
-	def void testGetEntity() {
-		// First create the entity.
+	def void testGetItem() {
+		// First create the item.
 		long key = 111;
 		String value = "value";
 		def body = '{"key": ' + key + ', "value": "' + value + '"}'		
@@ -46,16 +46,15 @@ class MvcRestControllerIntegrationTest extends GroovyTestCase {
 		println "currentUrl:" + currentUrl
 		def responseFromGet = new groovyx.net.http.RESTClient(URL).get(path: currentUrl);
 		assertEquals(200, responseFromGet.status)
-		Entity entity = MarshallingUtil.unmarshalJson(responseFromGet.data.toString(), Entity.class);
-		assertEquals(key, entity.getKey())
-		assertEquals(value, entity.getValue())
+		ItemLookupResponse itemLookupResponse = MarshallingUtil.unmarshalJson(responseFromGet.data.toString(), ItemLookupResponse.class);
+		assertEquals(value, itemLookupResponse.getValue())
 	}
 	
 	/**
-	 * Update an entity.  200 OK expected.
+	 * Update an item.  200 OK expected.
 	 */
-	def void testUpdateEntity() {
-		// First create the entity.
+	def void testUpdateItem() {
+		// First create the item.
 		long key = 111;
 		String value = "value";
 		def body = '{"key": ' + key + ', "value": "' + value + '"}'
@@ -73,33 +72,32 @@ class MvcRestControllerIntegrationTest extends GroovyTestCase {
 		// GET the updated record to assert.
 		def responseFromGet = new groovyx.net.http.RESTClient(URL).get(path: currentUrl);
 		assertEquals(200, responseFromGet.status)
-		Entity entity = MarshallingUtil.unmarshalJson(responseFromGet.data.toString(), Entity.class);
-		assertEquals(key, entity.getKey())
-		assertEquals(valueUpdated, entity.getValue())
+		ItemLookupResponse itemLookupResponse = MarshallingUtil.unmarshalJson(responseFromGet.data.toString(), ItemLookupResponse.class);
+		assertEquals(valueUpdated, itemLookupResponse.getValue())
 	}
 	
 	/**
-	 * Delete an entity.  200 OK expected.
+	 * Delete an item.  200 OK expected.
 	 */
-	def void testDeleteEntity() {
-		// First create the entity.
+	def void testDeleteItem() {
+		// First create the item.
 		long key = 111;
 		String value = "value";
 		def body = '{"key": ' + key + ', "value": "' + value + '"}'
 		def responseFromCreate = new groovyx.net.http.RESTClient(URL).post(path: PATH, contentType: groovyx.net.http.ContentType.JSON, body: body)
 		assertEquals(201, responseFromCreate.status)
 		
-		// Assert the entity is found.
+		// Assert the item is found.
 		def currentUrl = responseFromCreate.headers["Location"].getValue()
 		currentUrl = currentUrl.substring(1)
 		def responseFromGet = new groovyx.net.http.RESTClient(URL).get(path: currentUrl);
 		assertEquals(200, responseFromGet.status)
 		
-		// Now DELETE the entity.
+		// Now DELETE the item.
 		def responseFromDelete = new groovyx.net.http.RESTClient(URL).delete(path: currentUrl)
 		assertEquals(200, responseFromDelete.status)
 		
-		// Assert the entity is now not found.
+		// Assert the item is now not found.
 		try {
 			def responseFromNextGet = new groovyx.net.http.RESTClient(URL).get(path: currentUrl);
 			fail("Exception should be thrown.");

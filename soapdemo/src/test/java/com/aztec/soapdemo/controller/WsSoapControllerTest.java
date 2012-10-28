@@ -9,6 +9,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.aztec.common.constants.AztecConstants;
 import com.aztec.common.service.ItemService;
 import com.aztec.common.types.ItemCreateRequest;
 import com.aztec.common.types.ItemDeleteRequest;
@@ -55,7 +56,7 @@ public class WsSoapControllerTest {
 	public void testCreateItemSuccess() {
 		ItemResultResponse response = controller.createItem(itemCreateRequest);
 		assertNotNull(response);
-		assertEquals(WsSoapController.RESPONSE_SUCCESS, response.getResult());
+		assertEquals(AztecConstants.RESPONSE_SUCCESS, response.getResult());
 		assertTrue(service.containsKey(KEY));
 		assertTrue(service.containsValue(VALUE));
 	}
@@ -64,7 +65,7 @@ public class WsSoapControllerTest {
 	public void testCreateItemFail_MissingKey() {
 		ItemResultResponse response = controller.createItem(new ItemCreateRequest());
 		assertNotNull(response);
-		assertEquals(WsSoapController.RESPONSE_FAILED, response.getResult());
+		assertEquals(AztecConstants.RESPONSE_FAILED, response.getResult());
 		assertFalse(service.containsKey(KEY));
 		assertFalse(service.containsValue(VALUE));
 	}
@@ -72,9 +73,9 @@ public class WsSoapControllerTest {
 	@Test
 	public void testCreateItemFail_DuplicateCreate() {
 		ItemResultResponse response = controller.createItem(itemCreateRequest);
-		assertEquals(WsSoapController.RESPONSE_SUCCESS, response.getResult());
+		assertEquals(AztecConstants.RESPONSE_SUCCESS, response.getResult());
 		response = controller.createItem(itemCreateRequest);
-		assertEquals(WsSoapController.RESPONSE_FAILED, response.getResult());
+		assertEquals(AztecConstants.RESPONSE_FAILED, response.getResult());
 	}
 	
 	@Test
@@ -99,7 +100,7 @@ public class WsSoapControllerTest {
 		updatedItem.setKey(KEY);
 		updatedItem.setValue(VALUE_UPDATED);
 		ItemResultResponse response = controller.updateItem(updatedItem);
-		assertEquals(WsSoapController.RESPONSE_SUCCESS, response.getResult());
+		assertEquals(AztecConstants.RESPONSE_SUCCESS, response.getResult());
 		assertTrue(service.containsKey(KEY));
 		assertTrue(service.containsValue(VALUE_UPDATED));
 		assertFalse(service.containsValue(VALUE));
@@ -112,7 +113,7 @@ public class WsSoapControllerTest {
 		updatedItem.setKey(INVALID_KEY);
 		updatedItem.setValue(VALUE_UPDATED);
 		ItemResultResponse response = controller.updateItem(updatedItem);
-		assertEquals(WsSoapController.RESPONSE_FAILED, response.getResult());
+		assertEquals(AztecConstants.RESPONSE_FAILED, response.getResult());
 		assertFalse(service.containsValue(VALUE_UPDATED));
 	}
 	
@@ -120,7 +121,7 @@ public class WsSoapControllerTest {
 	public void testDeleteItemSuccess() {
 		controller.createItem(itemCreateRequest);
 		ItemResultResponse response = controller.deleteItem(itemDeleteRequest);
-		assertEquals(WsSoapController.RESPONSE_SUCCESS, response.getResult());
+		assertEquals(AztecConstants.RESPONSE_SUCCESS, response.getResult());
 	}
 
 	@Test
@@ -129,6 +130,6 @@ public class WsSoapControllerTest {
 		ItemDeleteRequest invalidKeyItem = new ItemDeleteRequest();
 		invalidKeyItem.setKey(INVALID_KEY);
 		ItemResultResponse response = controller.deleteItem(invalidKeyItem);
-		assertEquals(WsSoapController.RESPONSE_FAILED, response.getResult());
+		assertEquals(AztecConstants.RESPONSE_FAILED, response.getResult());
 	}
 }

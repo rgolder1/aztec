@@ -13,8 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.util.UriTemplate;
 
-import com.aztec.restdemo.service.EntityService;
-import com.aztec.restdemo.types.Entity;
+import com.aztec.common.constants.AztecConstants;
+import com.aztec.common.service.ItemService;
+import com.aztec.common.types.ItemCreateRequest;
+import com.aztec.common.types.ItemLookupResponse;
+import com.aztec.common.types.ItemResultResponse;
+import com.aztec.common.types.ItemUpdateRequest;
 
 @Controller
 @RequestMapping("/mvc/rest")
@@ -23,75 +27,84 @@ public class MvcRestController {
     final static Logger LOG = LoggerFactory.getLogger(MvcRestController.class.getName());
     
     private final static String URI_ROOT = "/mvc/rest";
-    private final static String URI_ENTITY = "/entity";
+    private final static String URI_ENTITY = "/item";
     
-    private EntityService service;
+    private ItemService service;
     
     @Autowired
-    public MvcRestController(EntityService service) {
+    public MvcRestController(ItemService service) {
     	this.service = service;
     }
     
     @RequestMapping(value=URI_ENTITY, method=RequestMethod.POST, consumes="application/json")
-    public ResponseEntity<String> createEntity(@RequestBody Entity entity) {
-        LOG.info("MvcRestController hit.  createEntity()");
-        ResponseEntity<String> responseEntity = null;
-        if(entity!=null && entity.getKey()!=0 && entity.getValue()!=null) {
-        	service.put(entity.getKey(), entity.getValue());
+    public ResponseEntity<ItemResultResponse> createItem(@RequestBody ItemCreateRequest item) {
+        LOG.info("MvcRestController hit.  createItem()");
+        ResponseEntity<ItemResultResponse> responseEntity = null;
+        ItemResultResponse resultResponse = new ItemResultResponse();
+        if(item!=null && item.getKey()!=0 && item.getValue()!=null) {
+        	service.put(item.getKey(), item.getValue());
         	HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.setLocation(new UriTemplate(URI_ROOT + URI_ENTITY + "/" + entity.getKey()).expand());
-        	responseEntity = new ResponseEntity<String>(httpHeaders, HttpStatus.CREATED);	
+            httpHeaders.setLocation(new UriTemplate(URI_ROOT + URI_ENTITY + "/" + item.getKey()).expand());
+            resultResponse.setResult(AztecConstants.RESPONSE_SUCCESS);
+        	responseEntity = new ResponseEntity<ItemResultResponse>(resultResponse, httpHeaders, HttpStatus.CREATED);	
         } else {
-        	responseEntity = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+        	resultResponse.setResult(AztecConstants.RESPONSE_FAILED);
+        	responseEntity = new ResponseEntity<ItemResultResponse>(resultResponse, HttpStatus.BAD_REQUEST);
         }    	
 
         return responseEntity;
     }
     
     @RequestMapping(value=URI_ENTITY+"/{key}", method=RequestMethod.GET, produces="application/json")
-    public ResponseEntity<Entity> getEntity(@PathVariable Long key) {
-    	LOG.info("MvcRestController hit.  getEntity()");
+    public ResponseEntity<ItemLookupResponse> getItem(@PathVariable Long key) {
+    	LOG.info("MvcRestController hit.  getItem()");
     	String value = service.get(key);
-    	ResponseEntity<Entity> responseEntity = null;
+    	ResponseEntity<ItemLookupResponse> responseEntity = null;
     	if(value!=null) {
-        	Entity entity = new Entity();
-        	entity.setKey(key);
-        	entity.setValue(value);
-    		responseEntity = new ResponseEntity<Entity>(entity, HttpStatus.OK);    			
+    		ItemLookupResponse itemLookupResponse = new ItemLookupResponse();
+    		itemLookupResponse.setValue(value);
+    		responseEntity = new ResponseEntity<ItemLookupResponse>(itemLookupResponse, HttpStatus.OK);    			
     	} else {
     		// Key not found.
-    		responseEntity = new ResponseEntity<Entity>(HttpStatus.NOT_FOUND);
+    		responseEntity = new ResponseEntity<ItemLookupResponse>(HttpStatus.NOT_FOUND);
     	}
     	return responseEntity;
     }
     
     @RequestMapping(value=URI_ENTITY+"/{key}", method=RequestMethod.PUT, consumes="application/json")
-    public ResponseEntity<String> updateEntity(@PathVariable Long key, @RequestBody Entity entity) {
-    	LOG.info("MvcRestController hit.  updateEntity()");
-    	ResponseEntity<String> responseEntity = null;
-    	if(entity==null || entity.getValue()==null) {
-        	responseEntity = new ResponseEntity<String>(HttpStatus.BAD_REQUEST);    		
+    public ResponseEntity<ItemResultResponse> updateItem(@PathVariable Long key, @RequestBody ItemUpdateRequest item) {
+    	LOG.info("MvcRestController hit.  updateItem()");
+    	ResponseEntity<ItemResultResponse> responseEntity = null;
+        ItemResultResponse resultResponse = new ItemResultResponse();
+    	if(item==null || item.getValue()==null) {
+    		resultResponse.setResult(AztecConstants.RESPONSE_FAILED);
+        	responseEntity = new ResponseEntity<ItemResultResponse>(resultResponse, HttpStatus.BAD_REQUEST);    		
     	}
     	if(service.containsKey(key)) {
-    		service.put(key, entity.getValue());
-    		responseEntity = new ResponseEntity<String>(HttpStatus.OK);
+    		service.put(key, item.getValue());
+    		resultResponse.setResult(AztecConstants.RESPONSE_SUCCESS);
+    		responseEntity = new ResponseEntity<ItemResultResponse>(resultResponse, HttpStatus.OK);
     	} else {
     		// Key not found.
-    		responseEntity = new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+    		resultResponse.setResult(AztecConstants.RESPONSE_FAILED);
+    		responseEntity = new ResponseEntity<ItemResultResponse>(resultResponse, HttpStatus.NOT_FOUND);
     	}
     	return responseEntity;
     }    
     
     @RequestMapping(value=URI_ENTITY+"/{key}", method=RequestMethod.DELETE)
-    public ResponseEntity<String> deleteEntity(@PathVariable Long key) {
-    	LOG.info("MvcRestController hit.  deleteEntity()");
-    	ResponseEntity<String> responseEntity = null;
+    public ResponseEntity<ItemResultResponse> deleteItem(@PathVariable Long key) {
+    	LOG.info("MvcRestController hit.  deleteItem()");
+    	ResponseEntity<ItemResultResponse> responseEntity = null;
+        ItemResultResponse resultResponse = new ItemResultResponse();
     	if(service.containsKey(key)) {
     		service.remove(key);
-    		responseEntity = new ResponseEntity<String>(HttpStatus.OK);
+    		resultResponse.setResult(AztecConstants.RESPONSE_SUCCESS);
+    		responseEntity = new ResponseEntity<ItemResultResponse>(resultResponse, HttpStatus.OK);
     	} else {
     		// Key not found.
-    		responseEntity = new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+    		resultResponse.setResult(AztecConstants.RESPONSE_FAILED);
+    		responseEntity = new ResponseEntity<ItemResultResponse>(resultResponse, HttpStatus.NOT_FOUND);
     	}
     	return responseEntity;
     }

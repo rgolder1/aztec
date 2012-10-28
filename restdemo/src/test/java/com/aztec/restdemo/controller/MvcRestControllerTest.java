@@ -12,9 +12,14 @@ import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.aztec.restdemo.controller.MvcRestController;
-import com.aztec.restdemo.service.EntityService;
-import com.aztec.restdemo.types.Entity;
+import com.aztec.common.constants.AztecConstants;
+import com.aztec.common.service.ItemService;
+import com.aztec.common.types.ItemCreateRequest;
+import com.aztec.common.types.ItemDeleteRequest;
+import com.aztec.common.types.ItemGetRequest;
+import com.aztec.common.types.ItemLookupResponse;
+import com.aztec.common.types.ItemResultResponse;
+import com.aztec.common.types.ItemUpdateRequest;
 
 public class MvcRestControllerTest {
 	
@@ -23,27 +28,41 @@ public class MvcRestControllerTest {
 	private static final String VALUE_UPDATED = "value_updated";
 	private static final long INVALID_KEY = 999;
 	
-	private static final String URI_CREATED = "/mvc/rest/entity/";
+	private static final String URI_CREATED = "/mvc/rest/item/";
 
-	private EntityService service;
+	private ItemService service;
 	private MvcRestController controller;
-	private Entity entity;
+	private ItemCreateRequest itemCreateRequest;
+	private ItemUpdateRequest itemUpdateRequest;
+	private ItemGetRequest itemGetRequest;
+	private ItemDeleteRequest itemDeleteRequest;
 	
 	@Before
 	public void setUp() {
-		service = new EntityService();
+		service = new ItemService();
 		controller = new MvcRestController(service);
+
+		itemCreateRequest = new ItemCreateRequest();
+		itemCreateRequest.setKey(KEY);
+		itemCreateRequest.setValue(VALUE);
+
+		itemUpdateRequest = new ItemUpdateRequest();
+		itemUpdateRequest.setKey(KEY);
+		itemUpdateRequest.setValue(VALUE);
 		
-		entity = new Entity();
-		entity.setKey(KEY);
-		entity.setValue(VALUE);
+		itemGetRequest = new ItemGetRequest();
+		itemGetRequest.setKey(KEY);
+		
+		itemDeleteRequest = new ItemDeleteRequest();
+		itemDeleteRequest.setKey(KEY);
 	}
 	
 	@Test
-	public void testCreateEntitySuccess() {
-		ResponseEntity<String> response = controller.createEntity(entity);
+	public void testCreateItemSuccess() {
+		ResponseEntity<ItemResultResponse> response = controller.createItem(itemCreateRequest);
 		assertNotNull(response);
 		assertEquals(URI.create(URI_CREATED+KEY), response.getHeaders().getLocation());
+		assertEquals(AztecConstants.RESPONSE_SUCCESS, response.getBody().getResult());
 		assertEquals(HttpStatus.CREATED, response.getStatusCode());
 		assertEquals(1, service.size());
 		assertTrue(service.containsKey(KEY));
@@ -51,71 +70,70 @@ public class MvcRestControllerTest {
 	}
 	
 	@Test
-	public void testCreateEntityFail() {
-		ResponseEntity<String> response = controller.createEntity(new Entity());
+	public void testCreateItemFail() {
+		ResponseEntity<ItemResultResponse> response = controller.createItem(new ItemCreateRequest());
 		assertNotNull(response);
+		assertEquals(AztecConstants.RESPONSE_FAILED, response.getBody().getResult());
 		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-		assertNull(response.getBody());
 		assertTrue(service.isEmpty());
 	}
 	
 	@Test
-	public void testGetEntitySuccess() {
-		controller.createEntity(entity);
-		ResponseEntity<Entity> response = controller.getEntity(KEY);
+	public void testGetItemSuccess() {
+		controller.createItem(itemCreateRequest);
+		ResponseEntity<ItemLookupResponse> response = controller.getItem(KEY);
 		assertNotNull(response);
-		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertNotNull(response.getBody());
-		assertEquals(KEY, response.getBody().getKey());
 		assertEquals(VALUE, response.getBody().getValue());
+		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
 	
 	@Test
-	public void testGetEntityFail() {
-		ResponseEntity<Entity> response = controller.getEntity(INVALID_KEY);
+	public void testGetItemFail() {
+		ResponseEntity<ItemLookupResponse> response = controller.getItem(INVALID_KEY);
 		assertNotNull(response);
 		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 		assertNull(response.getBody());
 	}
 	
 	@Test
-	public void testDeleteEntitySuccess() {
-		controller.createEntity(entity);
-		ResponseEntity<String> response = controller.deleteEntity(KEY);
+	public void testDeleteItemSuccess() {
+		controller.createItem(itemCreateRequest);
+		ResponseEntity<ItemResultResponse> response = controller.deleteItem(KEY);
 		assertNotNull(response);
+		assertEquals(AztecConstants.RESPONSE_SUCCESS, response.getBody().getResult());
 		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertNull(response.getBody());
 	}
 
 	@Test
-	public void testDeleteEntityFail() {
-		controller.createEntity(entity);
-		ResponseEntity<String> response = controller.deleteEntity(INVALID_KEY);
+	public void testDeleteItemFail() {
+		controller.createItem(itemCreateRequest);
+		ResponseEntity<ItemResultResponse> response = controller.deleteItem(INVALID_KEY);
 		assertNotNull(response);
+		assertEquals(AztecConstants.RESPONSE_FAILED, response.getBody().getResult());
 		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-		assertNull(response.getBody());
 	}
 	
 	@Test
-	public void testUpdateEntitySuccess() {
-		controller.createEntity(entity);
-		Entity updatedEntity = new Entity();
-		updatedEntity.setKey(KEY);
-		updatedEntity.setValue(VALUE_UPDATED);
-		ResponseEntity<String> response = controller.updateEntity(KEY, updatedEntity);
+	public void testUpdateItemSuccess() {
+		controller.createItem(itemCreateRequest);
+		ItemUpdateRequest updatedItem = new ItemUpdateRequest();
+		updatedItem.setKey(KEY);
+		updatedItem.setValue(VALUE_UPDATED);
+		ResponseEntity<ItemResultResponse> response = controller.updateItem(KEY, updatedItem);
 		assertNotNull(response);
+		assertEquals(AztecConstants.RESPONSE_SUCCESS, response.getBody().getResult());
 		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertNull(response.getBody());
 	}
 	
 	@Test
-	public void testUpdateEntityFail() {
-		Entity updatedEntity = new Entity();
-		updatedEntity.setKey(KEY);
-		updatedEntity.setValue(VALUE_UPDATED);
-		ResponseEntity<String> response = controller.updateEntity(KEY, updatedEntity);
+	public void testUpdateItemFail() {
+		ItemUpdateRequest updatedItem = new ItemUpdateRequest();
+		updatedItem.setKey(KEY);
+		updatedItem.setValue(VALUE_UPDATED);
+		ResponseEntity<ItemResultResponse> response = controller.updateItem(KEY, updatedItem);
 		assertNotNull(response);
+		assertEquals(AztecConstants.RESPONSE_FAILED, response.getBody().getResult());
 		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-		assertNull(response.getBody());
 	}
 }
