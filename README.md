@@ -1,7 +1,7 @@
 aztec
 =====
 
-Collection of my demo projects, including Hibernate with Spring JPA, Spring JDBC, Spring Transactions, Spring Data with MongoDB, REST with SpringMVC, REST with JAX-RS, SOAP with SpringWS, Spring Social.  Maven projects, integration testing on various projects demonstrate using Groovy, SoapUI and a Jersey client.
+Collection of my demo projects, including Hibernate with Spring JPA, Spring JDBC, Spring Transactions, Spring Data with MongoDB, REST with SpringMVC, REST with JAX-RS, SOAP with SpringWS, Spring Social.  These are maven projects, with integration testing on various projects demonstrating use of Groovy, SoapUI and via a Jersey client.
 
 - springdemo:
 

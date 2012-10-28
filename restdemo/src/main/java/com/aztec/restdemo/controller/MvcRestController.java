@@ -27,7 +27,7 @@ public class MvcRestController {
     final static Logger LOG = LoggerFactory.getLogger(MvcRestController.class.getName());
     
     private final static String URI_ROOT = "/mvc/rest";
-    private final static String URI_ENTITY = "/item";
+    private final static String URI_ITEM = "/item";
     
     private ItemService service;
     
@@ -36,7 +36,7 @@ public class MvcRestController {
     	this.service = service;
     }
     
-    @RequestMapping(value=URI_ENTITY, method=RequestMethod.POST, consumes="application/json")
+    @RequestMapping(value=URI_ITEM, method=RequestMethod.POST, consumes="application/json")
     public ResponseEntity<ItemResultResponse> createItem(@RequestBody ItemCreateRequest item) {
         LOG.info("MvcRestController hit.  createItem()");
         ResponseEntity<ItemResultResponse> responseEntity = null;
@@ -44,7 +44,7 @@ public class MvcRestController {
         if(item!=null && item.getKey()!=0 && item.getValue()!=null) {
         	service.put(item.getKey(), item.getValue());
         	HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.setLocation(new UriTemplate(URI_ROOT + URI_ENTITY + "/" + item.getKey()).expand());
+            httpHeaders.setLocation(new UriTemplate(URI_ROOT + URI_ITEM + "/" + item.getKey()).expand());
             resultResponse.setResult(AztecConstants.RESPONSE_SUCCESS);
         	responseEntity = new ResponseEntity<ItemResultResponse>(resultResponse, httpHeaders, HttpStatus.CREATED);	
         } else {
@@ -55,7 +55,7 @@ public class MvcRestController {
         return responseEntity;
     }
     
-    @RequestMapping(value=URI_ENTITY+"/{key}", method=RequestMethod.GET, produces="application/json")
+    @RequestMapping(value=URI_ITEM+"/{key}", method=RequestMethod.GET, produces="application/json")
     public ResponseEntity<ItemLookupResponse> getItem(@PathVariable Long key) {
     	LOG.info("MvcRestController hit.  getItem()");
     	String value = service.get(key);
@@ -71,7 +71,7 @@ public class MvcRestController {
     	return responseEntity;
     }
     
-    @RequestMapping(value=URI_ENTITY+"/{key}", method=RequestMethod.PUT, consumes="application/json")
+    @RequestMapping(value=URI_ITEM+"/{key}", method=RequestMethod.PUT, consumes="application/json")
     public ResponseEntity<ItemResultResponse> updateItem(@PathVariable Long key, @RequestBody ItemUpdateRequest item) {
     	LOG.info("MvcRestController hit.  updateItem()");
     	ResponseEntity<ItemResultResponse> responseEntity = null;
@@ -92,7 +92,7 @@ public class MvcRestController {
     	return responseEntity;
     }    
     
-    @RequestMapping(value=URI_ENTITY+"/{key}", method=RequestMethod.DELETE)
+    @RequestMapping(value=URI_ITEM+"/{key}", method=RequestMethod.DELETE)
     public ResponseEntity<ItemResultResponse> deleteItem(@PathVariable Long key) {
     	LOG.info("MvcRestController hit.  deleteItem()");
     	ResponseEntity<ItemResultResponse> responseEntity = null;

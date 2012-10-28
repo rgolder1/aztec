@@ -103,6 +103,8 @@ public class MvcRestControllerTest {
 		assertNotNull(response);
 		assertEquals(AztecConstants.RESPONSE_SUCCESS, response.getBody().getResult());
 		assertEquals(HttpStatus.OK, response.getStatusCode());
+		ResponseEntity<ItemLookupResponse> responseFromGet = controller.getItem(INVALID_KEY);
+		assertEquals(HttpStatus.NOT_FOUND, responseFromGet.getStatusCode());
 	}
 
 	@Test

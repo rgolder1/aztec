@@ -3,7 +3,10 @@ package com.aztec.jaxrsdemo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+
+import java.net.URI;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -13,8 +16,7 @@ import org.junit.Test;
 
 import com.aztec.common.service.ItemService;
 import com.aztec.common.types.ItemCreateRequest;
-import com.aztec.common.types.ItemDeleteRequest;
-import com.aztec.common.types.ItemGetRequest;
+import com.aztec.common.types.ItemLookupResponse;
 import com.aztec.common.types.ItemUpdateRequest;
 import com.aztec.jaxrsdemo.controller.JaxRsRestController;
 
@@ -28,8 +30,6 @@ public class JaxRsRestControllerTest {
 	private JaxRsRestController controller;
 	private ItemCreateRequest itemCreateRequest;
 	private ItemUpdateRequest itemUpdateRequest;
-	private ItemGetRequest itemGetRequest;
-	private ItemDeleteRequest itemDeleteRequest;
 	
 	@Before
 	public void setUp() {
@@ -44,11 +44,6 @@ public class JaxRsRestControllerTest {
 		itemUpdateRequest.setKey(KEY);
 		itemUpdateRequest.setValue(VALUE);
 		
-		itemGetRequest = new ItemGetRequest();
-		itemGetRequest.setKey(KEY);
-		
-		itemDeleteRequest = new ItemDeleteRequest();
-		itemDeleteRequest.setKey(KEY);
 	}
 
 	@Test
@@ -56,6 +51,7 @@ public class JaxRsRestControllerTest {
 		Response response = controller.createItem(itemCreateRequest);
 		assertNotNull(response);
 		assertEquals(Status.CREATED.getStatusCode(), response.getStatus());
+		assertEquals(URI.create(String.valueOf(KEY)), response.getMetadata().getFirst("Location"));
 		assertTrue(service.containsKey(KEY));
 		assertTrue(service.containsValue(VALUE));
 	}
@@ -75,5 +71,62 @@ public class JaxRsRestControllerTest {
 		assertEquals(Status.CREATED.getStatusCode(), response.getStatus());
 		response = controller.createItem(itemCreateRequest);
 		assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+	}
+
+	@Test
+	public void testGetItemSuccess() {
+		controller.createItem(itemCreateRequest);
+		Response response = controller.getItem(KEY);
+		assertNotNull(response);
+		assertNotNull(response.getEntity());
+		assertEquals(VALUE, ((ItemLookupResponse)response.getEntity()).getValue());
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+	}
+	
+	@Test
+	public void testGetItemFail() {
+		Response response = controller.getItem(INVALID_KEY);
+		assertNotNull(response);
+		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+		assertNull(response.getEntity());
+	}
+	
+	@Test
+	public void testDeleteItemSuccess() {
+		controller.createItem(itemCreateRequest);
+		Response response = controller.deleteItem(KEY);
+		assertNotNull(response);
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		response = controller.getItem(KEY);
+		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+	}
+
+	@Test
+	public void testDeleteItemFail() {
+		controller.createItem(itemCreateRequest);
+		Response response = controller.deleteItem(INVALID_KEY);
+		assertNotNull(response);
+		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+	}
+	
+	@Test
+	public void testUpdateItemSuccess() {
+		controller.createItem(itemCreateRequest);
+		ItemUpdateRequest updatedItem = new ItemUpdateRequest();
+		updatedItem.setKey(KEY);
+		updatedItem.setValue(VALUE_UPDATED);
+		Response response = controller.updateItem(KEY, updatedItem);
+		assertNotNull(response);
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+	}
+	
+	@Test
+	public void testUpdateItemFail() {
+		ItemUpdateRequest updatedItem = new ItemUpdateRequest();
+		updatedItem.setKey(KEY);
+		updatedItem.setValue(VALUE_UPDATED);
+		Response response = controller.updateItem(KEY, updatedItem);
+		assertNotNull(response);
+		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
 	}
 }
