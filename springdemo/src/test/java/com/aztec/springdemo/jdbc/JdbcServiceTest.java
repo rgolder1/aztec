@@ -21,9 +21,9 @@ public class JdbcServiceTest {
 	
 	@Test
 	public void testJdbcService() {
-		String result = service.getResult("JDBC");
+		String value = service.getValue("JDBC");
 				
-		assertTrue(result.contains("JDBC Success"));
-		assertTrue(result.contains("DEV"));
+		assertTrue(value.contains("JDBC Success"));
+		assertTrue(value.contains("DEV"));
 	}
 }

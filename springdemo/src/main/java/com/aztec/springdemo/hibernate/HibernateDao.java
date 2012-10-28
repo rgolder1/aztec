@@ -3,38 +3,38 @@ package com.aztec.springdemo.hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.aztec.springdemo.dao.DemoResultDao;
-import com.aztec.springdemo.hibernate.repository.DemoRepository;
+import com.aztec.springdemo.dao.ItemDao;
+import com.aztec.springdemo.hibernate.repository.ItemRepository;
 
 @Component
-public class HibernateDao implements DemoResultDao {
+public class HibernateDao implements ItemDao {
 	
 	@Autowired
-	private DemoRepository repository;
+	private ItemRepository repository;
 		
 	@Override
-	public String lookupResult(String type) {
-		String result = null;
+	public String getValue(String key) {
+		String value = null;
 		
-		DemoResult demoResult = repository.findByType(type);  
-		if(demoResult!=null) {
-			result = demoResult.getResult();
+		Item item = repository.findByKey(key);  
+		if(item!=null) {
+			value = item.getValue();
 		}
 		
-		return result;
+		return value;
 	}
 
 	@Override
-	public void createRecord(Long id, String type, String result) {
-		DemoResult entity = new DemoResult();
-		entity.setId(id);
-		entity.setType(type);
-		entity.setResult(result);
-		repository.save(entity);
+	public void createItem(Long id, String key, String value) {
+		Item item = new Item();
+		item.setId(id);
+		item.setKey(key);
+		item.setValue(value);
+		repository.save(item);
 	}
 	
 	@Override
-	public void deleteByType(String type) {
-		repository.deleteByType(type);
+	public void deleteByKey(String key) {
+		repository.deleteByKey(key);
 	}
 }

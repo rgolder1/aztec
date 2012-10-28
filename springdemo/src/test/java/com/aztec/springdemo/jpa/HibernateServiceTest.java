@@ -23,10 +23,10 @@ public class HibernateServiceTest {
 	
 	@Test
 	public void testHibernateService() {
-		String result = service.getResult("JPA");
+		String value = service.getValue("JPA");
 
-		assertTrue(result.contains("JPA Success"));
-		assertTrue(result.contains("DEV"));
+		assertTrue(value.contains("JPA Success"));
+		assertTrue(value.contains("DEV"));
 	}
 	
 	@Test
@@ -36,11 +36,11 @@ public class HibernateServiceTest {
 		String result = "CREATED";
 		
 		// Create and assert.
-		service.createDemoResult(id, type, result);
-		assertEquals("CREATED", service.getResult("TEST"));
+		service.createItem(id, type, result);
+		assertEquals("CREATED", service.getValue("TEST"));
 		
 		// Delete and assert.
 		service.deleteByType(type);
-		assertNull(service.getResult("TEST"));
+		assertNull(service.getValue("TEST"));
 	}
 }

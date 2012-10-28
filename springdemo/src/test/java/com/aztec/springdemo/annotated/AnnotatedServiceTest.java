@@ -19,8 +19,8 @@ public class AnnotatedServiceTest {
 	
 	@Test
 	public void testAnnotatedService() {
-		String result = service.getResult("Annotated");
+		String value = service.getValue("Annotated");
 
-		assertTrue(result.contains("Annotated Succes"));
+		assertTrue(value.contains("Annotated Succes"));
 	}
 }

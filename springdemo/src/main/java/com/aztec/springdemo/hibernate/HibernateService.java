@@ -6,18 +6,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.aztec.springdemo.dao.DemoResultDao;
+import com.aztec.springdemo.dao.ItemDao;
 
 @Service
 public class HibernateService {
 	
 	@Autowired
 	@Qualifier("hibernateDao")
-	private DemoResultDao dao;
+	private ItemDao dao;
 
 	@Transactional(readOnly = true)
-	public String getResult(String type) {
-		return dao.lookupResult(type);
+	public String getValue(String key) {
+		return dao.getValue(key);
 	}
 
 	/*
@@ -31,12 +31,12 @@ public class HibernateService {
 	 */
 	
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-	public void createDemoResult(Long id, String type, String result) {
-		dao.createRecord(id, type, result);
+	public void createItem(Long id, String key, String value) {
+		dao.createItem(id, key, value);
 	}
 
 	@Transactional
-	public void deleteByType(String type) {
-		dao.deleteByType(type);
+	public void deleteByType(String key) {
+		dao.deleteByKey(key);
 	}
 }

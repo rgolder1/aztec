@@ -13,8 +13,8 @@ public class BasicServiceTest {
 	public void testBasicService() {
 		BasicService service = new ClassPathXmlApplicationContext("META-INF/spring/application-context.xml").getBean(BasicService.class);
 
-		String result = service.getResult("Basic");
+		String value = service.getValue("Basic");
 		
-		assertTrue(result.contains("Basic Success"));
+		assertTrue(value.contains("Basic Success"));
 	}
 }

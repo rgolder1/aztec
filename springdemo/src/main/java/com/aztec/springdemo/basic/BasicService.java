@@ -1,16 +1,16 @@
 package com.aztec.springdemo.basic;
 
-import com.aztec.springdemo.dao.DemoResultDao;
+import com.aztec.springdemo.dao.ItemDao;
 
 public class BasicService {
 	
-	private DemoResultDao dao;
+	private ItemDao dao;
 	
-	public BasicService(DemoResultDao dao) {
+	public BasicService(ItemDao dao) {
 		this.dao = dao;
 	}
 
-	public String getResult(String type) {
-		return dao.lookupResult(type);
+	public String getValue(String key) {
+		return dao.getValue(key);
 	}
 }

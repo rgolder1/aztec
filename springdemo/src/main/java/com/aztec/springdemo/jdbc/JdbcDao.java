@@ -4,28 +4,28 @@ import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.aztec.springdemo.dao.DemoResultDao;
+import com.aztec.springdemo.dao.ItemDao;
 
-public class JdbcDao implements DemoResultDao {
+public class JdbcDao implements ItemDao {
 	
 	private DataSource dataSource;
 	
-	private final String SELECT_SQL = "SELECT RESULT FROM DEMO_RESULT dr WHERE dr.TYPE=?";
+	private final String SELECT_SQL = "SELECT VALUE FROM ITEM i WHERE i.KEY=?";
 	
 	@Override
-	public String lookupResult(String type) {
+	public String getValue(String key) {
 		JdbcTemplate jdbc = new JdbcTemplate(getDataSource());
-		String result = jdbc.queryForObject(SELECT_SQL, new Object[]{type}, String.class);
-		return result;
+		String value = jdbc.queryForObject(SELECT_SQL, new Object[]{key}, String.class);
+		return value;
 	}
 
 	@Override
-	public void createRecord(Long id, String type, String result) {
+	public void createItem(Long id, String key, String value) {
 		// No-op.
 	}
 
 	@Override
-	public void deleteByType(String type) {
+	public void deleteByKey(String key) {
 		// No-op.
 	}
 	

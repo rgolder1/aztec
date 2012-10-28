@@ -2,27 +2,27 @@ package com.aztec.springdemo.annotated;
 
 import org.springframework.stereotype.Component;
 
-import com.aztec.springdemo.dao.DemoResultDao;
+import com.aztec.springdemo.dao.ItemDao;
 
 @Component
-public class AnnotatedDao implements DemoResultDao {
+public class AnnotatedDao implements ItemDao {
 	
 	@Override
-	public String lookupResult(String type) {
-		String result = null;
-		if(type!=null && type.equals("Annotated")) {
-			result = "Annotated Success";
+	public String getValue(String key) {
+		String value = null;
+		if(key!=null && key.equals("Annotated")) {
+			value = "Annotated Success";
 		}
-		return result;
+		return value;
 	}
 
 	@Override
-	public void createRecord(Long id, String type, String result) {
+	public void createItem(Long id, String key, String value) {
 		// No-op.
 	}
 
 	@Override
-	public void deleteByType(String type) {
+	public void deleteByKey(String key) {
 		// No-op.
 	}
 }

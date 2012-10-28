@@ -1,25 +1,25 @@
 package com.aztec.springdemo.basic;
 
-import com.aztec.springdemo.dao.DemoResultDao;
+import com.aztec.springdemo.dao.ItemDao;
 
-public class BasicDao implements DemoResultDao {
+public class BasicDao implements ItemDao {
 
 	@Override
-	public String lookupResult(String type) {
-		String result = null;
-		if(type!=null && type.equals("Basic")) {
-			result = "Basic Success";
+	public String getValue(String key) {
+		String value = null;
+		if(key!=null && key.equals("Basic")) {
+			value = "Basic Success";
 		}
-		return result;
+		return value;
 	}
 
 	@Override
-	public void createRecord(Long id, String type, String result) {
+	public void createItem(Long id, String key, String value) {
 		// No-op.
 	}
 
 	@Override
-	public void deleteByType(String type) {
+	public void deleteByKey(String key) {
 		// No-op.
 	}
 }
