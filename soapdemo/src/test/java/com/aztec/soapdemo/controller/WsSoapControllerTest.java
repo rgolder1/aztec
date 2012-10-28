@@ -9,13 +9,13 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.aztec.soapdemo.service.EntityService;
-import com.aztec.soapdemo.types.EntityCreateRequest;
-import com.aztec.soapdemo.types.EntityDeleteRequest;
-import com.aztec.soapdemo.types.EntityGetRequest;
-import com.aztec.soapdemo.types.EntityLookupResponse;
-import com.aztec.soapdemo.types.EntityResultResponse;
-import com.aztec.soapdemo.types.EntityUpdateRequest;
+import com.aztec.common.service.ItemService;
+import com.aztec.common.types.ItemCreateRequest;
+import com.aztec.common.types.ItemDeleteRequest;
+import com.aztec.common.types.ItemGetRequest;
+import com.aztec.common.types.ItemLookupResponse;
+import com.aztec.common.types.ItemResultResponse;
+import com.aztec.common.types.ItemUpdateRequest;
 
 public class WsSoapControllerTest {
 
@@ -24,36 +24,36 @@ public class WsSoapControllerTest {
 	private static final String VALUE_UPDATED = "value_updated";
 	private static final long INVALID_KEY = 999;
 	
-	private EntityService service;
+	private ItemService service;
 	private WsSoapController controller;
-	private EntityCreateRequest entityCreateRequest;
-	private EntityUpdateRequest entityUpdateRequest;
-	private EntityGetRequest entityGetRequest;
-	private EntityDeleteRequest entityDeleteRequest;
+	private ItemCreateRequest itemCreateRequest;
+	private ItemUpdateRequest itemUpdateRequest;
+	private ItemGetRequest itemGetRequest;
+	private ItemDeleteRequest itemDeleteRequest;
 	
 	@Before
 	public void setUp() {
-		service = new EntityService();
+		service = new ItemService();
 		controller = new WsSoapController(service);
 		
-		entityCreateRequest = new EntityCreateRequest();
-		entityCreateRequest.setKey(KEY);
-		entityCreateRequest.setValue(VALUE);
+		itemCreateRequest = new ItemCreateRequest();
+		itemCreateRequest.setKey(KEY);
+		itemCreateRequest.setValue(VALUE);
 
-		entityUpdateRequest = new EntityUpdateRequest();
-		entityUpdateRequest.setKey(KEY);
-		entityUpdateRequest.setValue(VALUE);
+		itemUpdateRequest = new ItemUpdateRequest();
+		itemUpdateRequest.setKey(KEY);
+		itemUpdateRequest.setValue(VALUE);
 		
-		entityGetRequest = new EntityGetRequest();
-		entityGetRequest.setKey(KEY);
+		itemGetRequest = new ItemGetRequest();
+		itemGetRequest.setKey(KEY);
 		
-		entityDeleteRequest = new EntityDeleteRequest();
-		entityDeleteRequest.setKey(KEY);
+		itemDeleteRequest = new ItemDeleteRequest();
+		itemDeleteRequest.setKey(KEY);
 	}
 
 	@Test
-	public void testCreateEntitySuccess() {
-		EntityResultResponse response = controller.createEntity(entityCreateRequest);
+	public void testCreateItemSuccess() {
+		ItemResultResponse response = controller.createItem(itemCreateRequest);
 		assertNotNull(response);
 		assertEquals(WsSoapController.RESPONSE_SUCCESS, response.getResult());
 		assertTrue(service.containsKey(KEY));
@@ -61,8 +61,8 @@ public class WsSoapControllerTest {
 	}
 
 	@Test
-	public void testCreateEntityFail_MissingKey() {
-		EntityResultResponse response = controller.createEntity(new EntityCreateRequest());
+	public void testCreateItemFail_MissingKey() {
+		ItemResultResponse response = controller.createItem(new ItemCreateRequest());
 		assertNotNull(response);
 		assertEquals(WsSoapController.RESPONSE_FAILED, response.getResult());
 		assertFalse(service.containsKey(KEY));
@@ -70,35 +70,35 @@ public class WsSoapControllerTest {
 	}
 
 	@Test
-	public void testCreateEntityFail_DuplicateCreate() {
-		EntityResultResponse response = controller.createEntity(entityCreateRequest);
+	public void testCreateItemFail_DuplicateCreate() {
+		ItemResultResponse response = controller.createItem(itemCreateRequest);
 		assertEquals(WsSoapController.RESPONSE_SUCCESS, response.getResult());
-		response = controller.createEntity(entityCreateRequest);
+		response = controller.createItem(itemCreateRequest);
 		assertEquals(WsSoapController.RESPONSE_FAILED, response.getResult());
 	}
 	
 	@Test
-	public void testGetEntitySuccess() {
-		controller.createEntity(entityCreateRequest);
-		EntityLookupResponse response = controller.getEntity(entityGetRequest);
+	public void testGetItemSuccess() {
+		controller.createItem(itemCreateRequest);
+		ItemLookupResponse response = controller.getItem(itemGetRequest);
 		assertNotNull(response);
 		assertEquals(VALUE, response.getValue());
 	}
 
 	@Test
-	public void testGetEntityFail() {
-		EntityLookupResponse response = controller.getEntity(entityGetRequest);
+	public void testGetItemFail() {
+		ItemLookupResponse response = controller.getItem(itemGetRequest);
 		assertNotNull(response);
 		assertNull(response.getValue());
 	}
 
 	@Test
-	public void testUpdateEntitySuccess() {
-		controller.createEntity(entityCreateRequest);
-		EntityUpdateRequest updatedEntity = new EntityUpdateRequest();
-		updatedEntity.setKey(KEY);
-		updatedEntity.setValue(VALUE_UPDATED);
-		EntityResultResponse response = controller.updateEntity(updatedEntity);
+	public void testUpdateItemSuccess() {
+		controller.createItem(itemCreateRequest);
+		ItemUpdateRequest updatedItem = new ItemUpdateRequest();
+		updatedItem.setKey(KEY);
+		updatedItem.setValue(VALUE_UPDATED);
+		ItemResultResponse response = controller.updateItem(updatedItem);
 		assertEquals(WsSoapController.RESPONSE_SUCCESS, response.getResult());
 		assertTrue(service.containsKey(KEY));
 		assertTrue(service.containsValue(VALUE_UPDATED));
@@ -106,29 +106,29 @@ public class WsSoapControllerTest {
 	}
 
 	@Test
-	public void testUpdateEntityFail() {
-		controller.createEntity(entityCreateRequest);
-		EntityUpdateRequest updatedEntity = new EntityUpdateRequest();
-		updatedEntity.setKey(INVALID_KEY);
-		updatedEntity.setValue(VALUE_UPDATED);
-		EntityResultResponse response = controller.updateEntity(updatedEntity);
+	public void testUpdateItemFail() {
+		controller.createItem(itemCreateRequest);
+		ItemUpdateRequest updatedItem = new ItemUpdateRequest();
+		updatedItem.setKey(INVALID_KEY);
+		updatedItem.setValue(VALUE_UPDATED);
+		ItemResultResponse response = controller.updateItem(updatedItem);
 		assertEquals(WsSoapController.RESPONSE_FAILED, response.getResult());
 		assertFalse(service.containsValue(VALUE_UPDATED));
 	}
 	
 	@Test
-	public void testDeleteEntitySuccess() {
-		controller.createEntity(entityCreateRequest);
-		EntityResultResponse response = controller.deleteEntity(entityDeleteRequest);
+	public void testDeleteItemSuccess() {
+		controller.createItem(itemCreateRequest);
+		ItemResultResponse response = controller.deleteItem(itemDeleteRequest);
 		assertEquals(WsSoapController.RESPONSE_SUCCESS, response.getResult());
 	}
 
 	@Test
-	public void testDeleteEntityFail() {
-		controller.createEntity(entityCreateRequest);
-		EntityDeleteRequest invalidKeyEntity = new EntityDeleteRequest();
-		invalidKeyEntity.setKey(INVALID_KEY);
-		EntityResultResponse response = controller.deleteEntity(invalidKeyEntity);
+	public void testDeleteItemFail() {
+		controller.createItem(itemCreateRequest);
+		ItemDeleteRequest invalidKeyItem = new ItemDeleteRequest();
+		invalidKeyItem.setKey(INVALID_KEY);
+		ItemResultResponse response = controller.deleteItem(invalidKeyItem);
 		assertEquals(WsSoapController.RESPONSE_FAILED, response.getResult());
 	}
 }

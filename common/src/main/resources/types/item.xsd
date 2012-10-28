@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<xsd:schema xmlns="http://www.aztec.com/soapdemo/types"
+<xsd:schema xmlns="http://www.aztec.com/common/types"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-            targetNamespace="http://www.aztec.com/soapdemo/types">
+            targetNamespace="http://www.aztec.com/common/types">
     
     <!-- Request Types -->
     
-    <xsd:element name="EntityCreateRequest">
+    <xsd:element name="ItemCreateRequest">
     	<xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="key" type="xsd:long" minOccurs="1" maxOccurs="1"/>
@@ -13,7 +13,7 @@
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
-    <xsd:element name="EntityUpdateRequest">
+    <xsd:element name="ItemUpdateRequest">
     	<xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="key" type="xsd:long" minOccurs="1" maxOccurs="1"/>
@@ -21,14 +21,14 @@
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
-    <xsd:element name="EntityGetRequest">
+    <xsd:element name="ItemGetRequest">
     	<xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="key" type="xsd:long" minOccurs="1" maxOccurs="1"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
-    <xsd:element name="EntityDeleteRequest">
+    <xsd:element name="ItemDeleteRequest">
     	<xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="key" type="xsd:long" minOccurs="1" maxOccurs="1"/>
@@ -38,14 +38,14 @@
     
     <!-- Response Types -->
        
-    <xsd:element name="EntityLookupResponse">
+    <xsd:element name="ItemLookupResponse">
     	<xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="value" type="xsd:string" minOccurs="1" maxOccurs="1"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
-    <xsd:element name="EntityResultResponse">
+    <xsd:element name="ItemResultResponse">
     	<xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="result" type="xsd:string" minOccurs="1" maxOccurs="1"/>

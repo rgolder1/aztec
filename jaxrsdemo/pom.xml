@@ -1,13 +1,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   	<modelVersion>4.0.0</modelVersion>
-  	<groupId>com.aztec.restdemo</groupId>
-  	<artifactId>restdemo</artifactId>
+  	<groupId>com.aztec.jaxrsdemo</groupId>
+  	<artifactId>jaxrsdemo</artifactId>
   	<version>1.0.0-SNAPSHOT</version>
   	<packaging>war</packaging>
-  	<name>restdemo</name>
-  
+  	<name>jaxrsdemo</name>
+  	
     <properties>
         <spring.version>3.1.2.RELEASE</spring.version>
+        <serviceHostname>localhost</serviceHostname>
+        <servicePort>8080</servicePort>
+        <tomcat.version>6.0.33</tomcat.version>
     </properties>
     
   	<dependencies>  
@@ -38,18 +41,47 @@
             <version>${spring.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        
-        <!-- logging -->
-        <!-- note:  have no other references to slf4j or you'll get some uncertainty as to the config which is loaded -->
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.0.0</version>
-        </dependency>
+			<groupId>javax.ws.rs</groupId>
+			<artifactId>jsr311-api</artifactId>
+			<version>1.1</version>
+		</dependency>
+		<!--dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-server</artifactId>
+			<version>1.8</version>
+		</dependency-->
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-json</artifactId>
+			<version>1.8</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.sun.jersey.contribs</groupId>
+		    <artifactId>jersey-spring</artifactId>
+		    <version>1.8</version>
+		    <exclusions>
+		        <exclusion>
+		            <groupId>org.springframework</groupId>
+		            <artifactId>spring</artifactId>
+		        </exclusion>
+		        <exclusion>
+		            <groupId>org.springframework</groupId>
+		            <artifactId>spring-core</artifactId>
+		        </exclusion>
+		        <exclusion>
+		            <groupId>org.springframework</groupId>
+		            <artifactId>spring-web</artifactId>
+		        </exclusion>
+		        <exclusion>
+		            <groupId>org.springframework</groupId>
+		            <artifactId>spring-beans</artifactId>
+		        </exclusion>
+		        <exclusion>
+		            <groupId>org.springframework</groupId>
+		            <artifactId>spring-context</artifactId>
+		        </exclusion>
+		    </exclusions>
+		</dependency>
         
         <!-- Unit testing-->
         <dependency>
@@ -65,83 +97,47 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>1.9.0</version>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-client</artifactId>
+			<version>1.8</version>
             <scope>test</scope>
 		</dependency>
-		
-		<!-- integration tests in groovy -->
-        <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-all</artifactId>
-            <version>1.8.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.groovy.modules.http-builder</groupId>
-            <artifactId>http-builder</artifactId>
-            <version>0.5.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.mojo.groovy.runtime</groupId>
-            <artifactId>groovy-runtime-1.1</artifactId>
-            <version>1.0-beta-3</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!--unmarshalling in groovy-->
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-xc</artifactId>
-            <version>1.9.9</version>
-        </dependency>
-		
     </dependencies>
     
     <build>
-        <finalName>restdemo</finalName>
-        <plugins>
-              
-            <plugin>
-                <groupId>org.apache.tomcat.maven</groupId>
-                <artifactId>tomcat6-maven-plugin</artifactId>
+		<plugins>
+			<plugin>
+                <groupId>org.codehaus.mojo</groupId>
+				<artifactId>tomcat-maven-plugin</artifactId>
                 <configuration>
-                    <!--<server>localhost</server>-->
-                    <port>9090</port>
-                    <!--<url>http://localhost:9090/</url>-->
+                    <port>${servicePort}</port>
+                    <systemProperties>
+                        <JAVA_OPTS>-Xmx1024m -XX:MaxPermSize=256m</JAVA_OPTS>
+                        <servicePort>${servicePort}</servicePort> 
+                    </systemProperties>
+                    <addContextWarDependencies>true</addContextWarDependencies>
                     <fork>true</fork>
                 </configuration>
                 <executions>
                     <execution>
-                        <id>test against server</id>
-                        <phase>integration-test</phase>
-                        <configuration>
-                            <port>9090</port>
-                        </configuration>
-                        <goals>
-                            <goal>run-war</goal>
-                        </goals>
+                        <id>setup</id>
+                        <phase>pre-integration-test</phase>
+                        <goals><goal>run-war</goal></goals>
                     </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.gmaven</groupId>
-                <artifactId>gmaven-plugin</artifactId>
-                <version>1.2</version>
-                <extensions>true</extensions>
-                <executions>
                     <execution>
-                        <phase>integration-test</phase>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>testCompile</goal>
-                        </goals>
-                        <configuration>
-                            <providerSelection>1.7</providerSelection>
-                        </configuration>
+                        <id>teardown</id>
+                        <phase>post-integration-test</phase>
+                        <goals><goal>shutdown</goal></goals>
                     </execution>
                 </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.tomcat</groupId>
+                        <artifactId>catalina</artifactId>
+                        <version>${tomcat.version}</version>
+                        <scope>runtime</scope>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -156,13 +152,13 @@
                         </goals>
                         <configuration>
                             <includes>
-                                <include>**/*IntegrationTest*</include>
+                                <include>**/*IntegrationTst*</include>
                             </includes>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
-        
+            
             <!-- xsd generated types -->
             <plugin>
                 <groupId>org.jvnet.jaxb2.maven2</groupId>

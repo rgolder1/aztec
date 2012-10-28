@@ -1,7 +1,7 @@
 aztec
 =====
 
-Collection of my Spring demo projects, including Hibernate with Spring JPA, Spring JDBC, Spring Transactions, Spring Data with MongoDB, REST with SpringMVC, SOAP with SpringWS, Spring Social.  Maven projects, integration testing with Groovy and SoapUI.
+Collection of my demo projects, including Hibernate with Spring JPA, Spring JDBC, Spring Transactions, Spring Data with MongoDB, REST with SpringMVC, REST with JAX-RS, SOAP with SpringWS, Spring Social.  Maven projects, integration testing on various projects demonstrate using Groovy, SoapUI and Jersey.
 
 - springdemo:
 
@@ -9,7 +9,7 @@ Collection of Spring module demoes, including Hibernate with JPA, and JDBC.
 
 - mongodb:
 
-MongoDB Spring Data demo.  Requires a running Mongo instance.  See the Unit test for details.
+MongoDB Spring Data demo.  Requires a running Mongo instance for the test.  See the Unit test for details.
 
 - social:
 
@@ -30,6 +30,10 @@ REST Controller with SpringMVC.  The service is a Map for create/get/update/remo
 
 - soapdemo:
 
-SOAP Controller with Spring Web Services.  The service is a Map for create/get/update/remove.  Includes SoapUI project for testing.
+SOAP Controller with Spring Web Services.  The service is a Map for create/get/update/remove.  Includes SoapUI project for integration testing.
 
 Open SoapUI and import project src/tests/resources/soapdemo-soapui-project.xml.  On command line deploy war with mvn tomcat:run, and run SoapUI test cases within SoapUI.  Alternatively run mvn clean install, which will run the SoapUI tests as part of the integration-test phase using the maven tomcat and SoapUI plugins.
+
+- jaxrsdemo:
+
+REST Controller component, with Jax-Rs using Jersey.  The service is a Map for create/get/update/remove.  Includes a Jersey client for integration testing.  Run as part of the mvn clean install.

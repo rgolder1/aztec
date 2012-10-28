@@ -4,12 +4,31 @@
   	<artifactId>common</artifactId>
   	<version>1.0.0-SNAPSHOT</version>
   	<packaging>jar</packaging>
-  
+    	
     <properties>
+        <spring.version>3.1.2.RELEASE</spring.version>
+        <serviceHostname>localhost</serviceHostname>
+        <servicePort>8080</servicePort>
+        <tomcat.version>6.0.33</tomcat.version>
         <jackson.version>1.9.9</jackson.version>
     </properties>
     
   	<dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-core-asl</artifactId>
@@ -26,4 +45,33 @@
 			<version>${jackson.version}</version>
 		</dependency>  	
   	</dependencies>
+  	
+  	<build>
+  		<plugins>
+            <!-- xsd generated types -->
+            <plugin>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+                <version>0.8.0</version>
+                <executions>
+                    <execution>
+                        <id>generate-dtos</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <schemaIncludes>
+                        <schemaInclude>**/*.xsd</schemaInclude>
+                    </schemaIncludes>
+                    <verbose>false</verbose>
+                    <debug>false</debug>
+                    <extension>false</extension>
+                    <strict>false</strict>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

@@ -14,9 +14,9 @@
 	<context:component-scan base-package="com.aztec.soapdemo.controller" />
 	<sws:annotation-driven/>
 	
-	<!-- Run mvn tomcat:run, then navigate to http://localhost:8080/soapdemo/entities.wsdl -->
-	<sws:dynamic-wsdl id="entities" portTypeName="Entities" locationUri="http://localhost:8080/soapdemo">
-		<sws:xsd location="classpath:/types/entity.xsd"/>
+	<!-- Run mvn tomcat:run, then navigate to http://localhost:8080/soapdemo/items.wsdl -->
+	<sws:dynamic-wsdl id="items" portTypeName="Items" locationUri="http://localhost:8080/soapdemo">
+		<sws:xsd location="classpath:/types/item.xsd"/>
 	</sws:dynamic-wsdl>
 
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->

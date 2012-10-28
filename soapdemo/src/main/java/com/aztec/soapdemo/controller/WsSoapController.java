@@ -8,13 +8,13 @@ import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
-import com.aztec.soapdemo.service.EntityService;
-import com.aztec.soapdemo.types.EntityCreateRequest;
-import com.aztec.soapdemo.types.EntityDeleteRequest;
-import com.aztec.soapdemo.types.EntityGetRequest;
-import com.aztec.soapdemo.types.EntityLookupResponse;
-import com.aztec.soapdemo.types.EntityResultResponse;
-import com.aztec.soapdemo.types.EntityUpdateRequest;
+import com.aztec.common.service.ItemService;
+import com.aztec.common.types.ItemCreateRequest;
+import com.aztec.common.types.ItemDeleteRequest;
+import com.aztec.common.types.ItemGetRequest;
+import com.aztec.common.types.ItemLookupResponse;
+import com.aztec.common.types.ItemResultResponse;
+import com.aztec.common.types.ItemUpdateRequest;
 
 @Endpoint
 public class WsSoapController {
@@ -22,29 +22,29 @@ public class WsSoapController {
     final static Logger LOG = LoggerFactory.getLogger(WsSoapController.class.getName());
     
     // The namespace of both request and response as declared in the XSD file
-    private static final String NAMESPACE_URI = "http://www.aztec.com/soapdemo/types";
+    private static final String NAMESPACE_URI = "http://www.aztec.com/common/types";
 
     // The local name of the expected request.
-    private static final String REQUEST_CREATE_NAME = "EntityCreateRequest";
-    private static final String REQUEST_GET_NAME = "EntityGetRequest";
-    private static final String REQUEST_UPDATE_NAME = "EntityUpdateRequest";
-    private static final String REQUEST_DELETE_NAME = "EntityDeleteRequest";
+    private static final String REQUEST_CREATE_NAME = "ItemCreateRequest";
+    private static final String REQUEST_GET_NAME = "ItemGetRequest";
+    private static final String REQUEST_UPDATE_NAME = "ItemUpdateRequest";
+    private static final String REQUEST_DELETE_NAME = "ItemDeleteRequest";
     
     public static final String RESPONSE_SUCCESS = "SUCCESS";
     public static final String RESPONSE_FAILED = "FAILED";
         
-    private EntityService service;
+    private ItemService service;
     
     @Autowired
-    public WsSoapController(EntityService service) {
+    public WsSoapController(ItemService service) {
     	this.service = service;
     }
     
     @PayloadRoot(localPart = REQUEST_CREATE_NAME, namespace = NAMESPACE_URI)
     @ResponsePayload
-    public EntityResultResponse createEntity(@RequestPayload EntityCreateRequest request) {
-    	LOG.info("WsSoapController hit.  createEntity()");
-    	EntityResultResponse response = new EntityResultResponse();
+    public ItemResultResponse createItem(@RequestPayload ItemCreateRequest request) {
+    	LOG.info("WsSoapController hit.  createItem()");
+    	ItemResultResponse response = new ItemResultResponse();
     	if(request.getKey()!=0 && request.getValue()!=null && !service.containsKey(request.getKey())) {
 	    	service.put(request.getKey(), request.getValue());
 	    	response.setResult(RESPONSE_SUCCESS);
@@ -57,9 +57,9 @@ public class WsSoapController {
     
     @PayloadRoot(localPart = REQUEST_GET_NAME, namespace = NAMESPACE_URI)
     @ResponsePayload
-    public EntityLookupResponse getEntity(@RequestPayload EntityGetRequest request) {
-    	LOG.info("WsSoapController hit.  getEntity()");
-    	EntityLookupResponse response = new EntityLookupResponse();
+    public ItemLookupResponse getItem(@RequestPayload ItemGetRequest request) {
+    	LOG.info("WsSoapController hit.  getItem()");
+    	ItemLookupResponse response = new ItemLookupResponse();
     	String value = null;
     	if(request.getKey()!=0 ) {
     		value = service.get(request.getKey());
@@ -70,9 +70,9 @@ public class WsSoapController {
 
     @PayloadRoot(localPart = REQUEST_UPDATE_NAME, namespace = NAMESPACE_URI)
     @ResponsePayload
-    public EntityResultResponse updateEntity(@RequestPayload EntityUpdateRequest request) {
-    	LOG.info("WsSoapController hit.  updateEntity()");
-    	EntityResultResponse response = new EntityResultResponse();
+    public ItemResultResponse updateItem(@RequestPayload ItemUpdateRequest request) {
+    	LOG.info("WsSoapController hit.  updateItem()");
+    	ItemResultResponse response = new ItemResultResponse();
     	if(request.getKey()!=0 && request.getValue()!=null && service.containsKey(request.getKey())) {
 	    	service.put(request.getKey(), request.getValue());
 	    	response.setResult(RESPONSE_SUCCESS);
@@ -84,9 +84,9 @@ public class WsSoapController {
 
     @PayloadRoot(localPart = REQUEST_DELETE_NAME, namespace = NAMESPACE_URI)
     @ResponsePayload
-    public EntityResultResponse deleteEntity(@RequestPayload EntityDeleteRequest request) {
-    	LOG.info("WsSoapController hit.  deleteEntity()");
-    	EntityResultResponse response = new EntityResultResponse();
+    public ItemResultResponse deleteItem(@RequestPayload ItemDeleteRequest request) {
+    	LOG.info("WsSoapController hit.  deleteItem()");
+    	ItemResultResponse response = new ItemResultResponse();
     	if(request.getKey()!=0 && service.containsKey(request.getKey())) {
 	    	service.remove(request.getKey());
 	    	response.setResult(RESPONSE_SUCCESS);

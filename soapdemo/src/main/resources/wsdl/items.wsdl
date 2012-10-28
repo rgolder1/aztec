@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:sch="http://www.aztec.com/common/types" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.aztec.com/common/types" targetNamespace="http://www.aztec.com/common/types">
+  <wsdl:types>
+    <xsd:schema xmlns="http://www.aztec.com/common/types" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.aztec.com/common/types">
+    
+    <!-- Request Types -->
+    
+    <xsd:element name="ItemCreateRequest">
+    	<xsd:complexType>
+            <xsd:sequence>
+                <xsd:element maxOccurs="1" minOccurs="1" name="key" type="xsd:long"/>
+                <xsd:element maxOccurs="1" minOccurs="1" name="value" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ItemUpdateRequest">
+    	<xsd:complexType>
+            <xsd:sequence>
+                <xsd:element maxOccurs="1" minOccurs="1" name="key" type="xsd:long"/>
+                <xsd:element maxOccurs="1" minOccurs="1" name="value" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ItemGetRequest">
+    	<xsd:complexType>
+            <xsd:sequence>
+                <xsd:element maxOccurs="1" minOccurs="1" name="key" type="xsd:long"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ItemDeleteRequest">
+    	<xsd:complexType>
+            <xsd:sequence>
+                <xsd:element maxOccurs="1" minOccurs="1" name="key" type="xsd:long"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <!-- Response Types -->
+       
+    <xsd:element name="ItemLookupResponse">
+    	<xsd:complexType>
+            <xsd:sequence>
+                <xsd:element maxOccurs="1" minOccurs="1" name="value" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ItemResultResponse">
+    	<xsd:complexType>
+            <xsd:sequence>
+                <xsd:element maxOccurs="1" minOccurs="1" name="result" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    
+</xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="ItemDeleteRequest">
+    <wsdl:part element="tns:ItemDeleteRequest" name="ItemDeleteRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ItemGetRequest">
+    <wsdl:part element="tns:ItemGetRequest" name="ItemGetRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ItemUpdateRequest">
+    <wsdl:part element="tns:ItemUpdateRequest" name="ItemUpdateRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ItemResultResponse">
+    <wsdl:part element="tns:ItemResultResponse" name="ItemResultResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ItemCreateRequest">
+    <wsdl:part element="tns:ItemCreateRequest" name="ItemCreateRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ItemLookupResponse">
+    <wsdl:part element="tns:ItemLookupResponse" name="ItemLookupResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="Items">
+    <wsdl:operation name="ItemDelete">
+      <wsdl:input message="tns:ItemDeleteRequest" name="ItemDeleteRequest">
+    </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="ItemGet">
+      <wsdl:input message="tns:ItemGetRequest" name="ItemGetRequest">
+    </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="ItemUpdate">
+      <wsdl:input message="tns:ItemUpdateRequest" name="ItemUpdateRequest">
+    </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="ItemResult">
+      <wsdl:output message="tns:ItemResultResponse" name="ItemResultResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ItemCreate">
+      <wsdl:input message="tns:ItemCreateRequest" name="ItemCreateRequest">
+    </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="ItemLookup">
+      <wsdl:output message="tns:ItemLookupResponse" name="ItemLookupResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ItemsSoap11" type="tns:Items">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="ItemDelete">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="ItemDeleteRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="ItemGet">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="ItemGetRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="ItemUpdate">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="ItemUpdateRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="ItemResult">
+      <soap:operation soapAction=""/>
+      <wsdl:output name="ItemResultResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ItemCreate">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="ItemCreateRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="ItemLookup">
+      <soap:operation soapAction=""/>
+      <wsdl:output name="ItemLookupResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ItemsService">
+    <wsdl:port binding="tns:ItemsSoap11" name="ItemsSoap11">
+      <soap:address location="http://localhost:8080/soapdemo"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
