@@ -8,6 +8,7 @@ import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
+import com.aztec.common.constants.AztecConstants;
 import com.aztec.common.service.ItemService;
 import com.aztec.common.types.ItemCreateRequest;
 import com.aztec.common.types.ItemDeleteRequest;
@@ -44,9 +45,9 @@ public class WsSoapController {
     	ItemResultResponse response = new ItemResultResponse();
     	if(request.getKey()!=0 && request.getValue()!=null && !service.containsKey(request.getKey())) {
 	    	service.put(request.getKey(), request.getValue());
-	    	response.setResult(RESPONSE_SUCCESS);
+	    	response.setResult(AztecConstants.RESPONSE_SUCCESS);
     	} else {
-	    	response.setResult(RESPONSE_FAILED);
+	    	response.setResult(AztecConstants.RESPONSE_FAILED);
 
     	}
     	return response;
@@ -72,9 +73,9 @@ public class WsSoapController {
     	ItemResultResponse response = new ItemResultResponse();
     	if(request.getKey()!=0 && request.getValue()!=null && service.containsKey(request.getKey())) {
 	    	service.put(request.getKey(), request.getValue());
-	    	response.setResult(RESPONSE_SUCCESS);
+	    	response.setResult(AztecConstants.RESPONSE_SUCCESS);
     	} else {
-	    	response.setResult(RESPONSE_FAILED);
+	    	response.setResult(AztecConstants.RESPONSE_FAILED);
     	}
     	return response;
     }
@@ -86,9 +87,9 @@ public class WsSoapController {
     	ItemResultResponse response = new ItemResultResponse();
     	if(request.getKey()!=0 && service.containsKey(request.getKey())) {
 	    	service.remove(request.getKey());
-	    	response.setResult(RESPONSE_SUCCESS);
+	    	response.setResult(AztecConstants.RESPONSE_SUCCESS);
     	} else {
-	    	response.setResult(RESPONSE_FAILED);
+	    	response.setResult(AztecConstants.RESPONSE_FAILED);
     	}
     	return response;
     }
